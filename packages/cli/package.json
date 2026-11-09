@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Command-line interface for the RepoRisk intelligence platform",
   "author": "Shrish Kulkarni <shrishkulkarni@gmail.com>",
-  "license": "Apache-2.0",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "bin": {
     "reporisk": "./bin/reporisk.js"

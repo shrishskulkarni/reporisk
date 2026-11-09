@@ -4,7 +4,7 @@
   "private": true,
   "description": "Repository Risk Intelligence Platform",
   "author": "Shrish Kulkarni <shrishkulkarni@gmail.com>",
-  "license": "Apache-2.0",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "engines": {
     "node": ">=20.0.0",

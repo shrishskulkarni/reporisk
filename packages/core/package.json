@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Core intelligence engine, typed contracts, scanners, correlation, and risk calculation for RepoRisk",
   "author": "Shrish Kulkarni <shrishkulkarni@gmail.com>",
-  "license": "Apache-2.0",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./src/index.ts",

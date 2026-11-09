@@ -1,4 +1,6 @@
-# RepoRisk
+<p align="center">
+  <img src="assets/logo.png" alt="RepoRisk Logo" width="460" />
+</p>
 
 <p align="center">
   <strong>Know what can go wrong before your code does.</strong>
@@ -6,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/shrishskulkarni/reporisk/actions"><img src="https://github.com/shrishskulkarni/reporisk/workflows/CI/badge.svg" alt="CI Status" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Non--Commercial-red.svg" alt="License" /></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node.js-%E2%89%A520.0.0-green.svg" alt="Node.js Version" /></a>
   <a href="https://pnpm.io"><img src="https://img.shields.io/badge/Maintained%20with-pnpm-orange.svg" alt="pnpm" /></a>
 </p>
@@ -16,7 +18,7 @@
 > **Core Directive:**  
 > *Paste any repository. RepoRisk builds a complete map of what can go wrong, proves what it can, explains what it can't prove, and tells you what to fix first.*
 
-RepoRisk is an open-source **Repository Risk Intelligence Platform**. It moves beyond traditional siloed vulnerability scanners by correlating application code, secrets, software supply chain, CI/CD pipelines, and architectural reliability into a single explainable risk graph.
+RepoRisk is a **Repository Risk Intelligence Platform**. It moves beyond traditional siloed vulnerability scanners by correlating application code, secrets, software supply chain, CI/CD pipelines, and architectural reliability into a single explainable risk graph.
 
 ---
 
@@ -153,4 +155,4 @@ pnpm --filter reporisk exec reporisk scan https://github.com/owner/repo
 ## Governance & Maintenance
 
 - **Owner & Principal Maintainer:** Shrish Kulkarni ([@shrishskulkarni](https://github.com/shrishskulkarni))
-- **License:** [Apache License 2.0](LICENSE)
+- **License:** [RepoRisk Non-Commercial & Patent-Restricted License](LICENSE) (Explicit written permission from Shrish Kulkarni required for commercial or patent use)
