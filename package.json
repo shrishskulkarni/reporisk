@@ -1,0 +1,27 @@
+{
+  "name": "reporisk-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Repository Risk Intelligence Platform",
+  "author": "Shrish Kulkarni <shrishkulkarni@gmail.com>",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@12.18.0",
+  "scripts": {
+    "build": "pnpm --filter \"./packages/*\" run build",
+    "typecheck": "pnpm --filter \"./packages/*\" run typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "pnpm --filter \"./packages/*\" run clean"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.4"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "reporisk",
+  "version": "0.1.0",
+  "description": "Command-line interface for the RepoRisk intelligence platform",
+  "author": "Shrish Kulkarni <shrishkulkarni@gmail.com>",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "reporisk": "./bin/reporisk.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "@reporisk/core": "workspace:*",
+    "commander": "^13.1.0"
+  }
+}
