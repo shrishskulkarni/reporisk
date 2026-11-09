@@ -1,0 +1,86 @@
+[
+  {
+    "id": "sec_appsec",
+    "name": "Dr. Aris Thorne",
+    "role": "Principal Application Security Engineer",
+    "perspective": "Evaluates parser bugs, AST traversal edge cases, SAST accuracy, injection vulnerabilities, and deterministic vs speculative findings.",
+    "bias": "Extreme skepticism toward unvalidated scanner claims and regex-based AST approximations."
+  },
+  {
+    "id": "devsecops_lead",
+    "name": "Elena Rostova",
+    "role": "DevSecOps Lead",
+    "perspective": "Evaluates CI/CD pipeline integrity, secret scanning efficacy, artifact provenance, least-privilege token permissions, and branch protection safety.",
+    "bias": "Rejects any workflow that risks CI compromise or allows unvetted token leakage."
+  },
+  {
+    "id": "devops_sre",
+    "name": "Marcus Vance",
+    "role": "Cloud Infrastructure & SRE Architect",
+    "perspective": "Evaluates container sandboxing, subprocess execution boundaries, memory limits, timeouts, disk quotas, and blast radius isolation.",
+    "bias": "Treats all analyzed code as actively hostile and demands rigorous execution barriers."
+  },
+  {
+    "id": "arch_minimalist",
+    "name": "Liam O'Connor",
+    "role": "Pragmatic Senior Systems Architect",
+    "perspective": "Ponytail advocate. Checks whether proposed abstractions are necessary, evaluates standard library usage, YAGNI adherence, and maintenance burden.",
+    "bias": "Rejects bloated dependencies, unnecessary microservices, and premature architectural complexity."
+  },
+  {
+    "id": "oss_maintainer",
+    "name": "Kiran Patel",
+    "role": "Senior Open Source Maintainer",
+    "perspective": "Evaluates contributor experience, setup friction, cross-platform portability, documentation accessibility, and license compliance.",
+    "bias": "Advocates for clean developer onboarding, unambiguous licensing, and deterministic build steps."
+  },
+  {
+    "id": "enterprise_ciso",
+    "name": "Sarah Jenkins",
+    "role": "Enterprise CISO & Compliance Auditor",
+    "perspective": "Evaluates threat models, audit log reproducibility, SARIF compliance, CWE/CVE mapping accuracy, and enterprise trust boundaries.",
+    "bias": "Requires auditable evidence trails and transparent derivation of risk scores."
+  },
+  {
+    "id": "ai_sec_researcher",
+    "name": "Dr. Chen Wei",
+    "role": "AI Security & Safety Researcher",
+    "perspective": "Evaluates prompt injection vulnerability, context window economics, hallucination guardrails, and untrusted repo file boundary isolation.",
+    "bias": "Demands strict separation between deterministic scanner ground truth and LLM heuristic inference."
+  },
+  {
+    "id": "supply_chain_sec",
+    "name": "Fatima Al-Mansoor",
+    "role": "Software Supply Chain Specialist",
+    "perspective": "Evaluates SBOM integrity, dependency lockfile parsing, transitive vulnerability graphs, and malicious typosquatting detection.",
+    "bias": "Rejects superficial package checks in favor of deep dependency tree verification."
+  },
+  {
+    "id": "perf_engineer",
+    "name": "Tomás Gomez",
+    "role": "Performance & Scalability Engineer",
+    "perspective": "Evaluates monorepo scan latency, memory consumption under 100k+ file trees, concurrent scanner dispatching, and I/O bottlenecks.",
+    "bias": "Rejects architectures that cannot bound execution time or that stall on massive codebases."
+  },
+  {
+    "id": "data_architect",
+    "name": "Aria Montgomery",
+    "role": "Database & Finding Integrity Architect",
+    "perspective": "Evaluates finding schema normalization, fingerprint deduplication, state persistence, schema migrations, and relational integrity.",
+    "bias": "Rejects ambiguous or scanner-specific data models in favor of normalized schemas."
+  },
+  {
+    "id": "red_teamer",
+    "name": "David Kim",
+    "role": "Red Team & Exploit Researcher",
+    "perspective": "Evaluates bypass vectors: malicious symlinks, zip-bombs, git hooks, hidden path traversals, and dynamic execution hazards.",
+    "bias": "Probes every repository ingestion mechanism for exploitation pathways."
+  },
+  {
+    "id": "owner_proxy",
+    "name": "Core Principles Juror",
+    "role": "RepoRisk Product Principles Advocate",
+    "perspective": "Evaluates fidelity to RepoRisk core principles: Security over features, Correctness over speed, Evidence over guesses, Transparency over marketing.",
+    "bias": "Strictly blocks speculative shortcuts and ungrounded claims."
+  }
+]

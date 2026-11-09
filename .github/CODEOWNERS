@@ -1,0 +1,27 @@
+# RepoRisk Code Ownership
+# Lines starting with '#' are comments.
+# Each line is a file pattern followed by one or more owners.
+# More specific owners take precedence over general ones.
+
+# Global default owner: Shrish Kulkarni owns every part of RepoRisk
+* @shrishskulkarni
+
+# Critical CI/CD workflows and repository governance
+/.github/ @shrishskulkarni
+/.github/workflows/ @shrishskulkarni
+/.github/CODEOWNERS @shrishskulkarni
+
+# Architecture and Security documentation
+/docs/architecture/ @shrishskulkarni
+/docs/security/ @shrishskulkarni
+/docs/governance/ @shrishskulkarni
+/docs/engineering/ @shrishskulkarni
+
+# Agent workflows, rules, and skills
+/.agents/ @shrishskulkarni
+/AGENTS.md @shrishskulkarni
+
+# Core application engine, scanners, and risk models
+/src/ @shrishskulkarni
+/packages/ @shrishskulkarni
+/tests/ @shrishskulkarni
