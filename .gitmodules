@@ -1,0 +1,12 @@
+[submodule "tools/court-skill"]
+	path = tools/court-skill
+	url = https://github.com/alexyc9381/court-skill.git
+[submodule "tools/ponytail"]
+	path = tools/ponytail
+	url = https://github.com/DietrichGebert/ponytail.git
+[submodule "tools/vibe-wise"]
+	path = tools/vibe-wise
+	url = https://github.com/nykooi1/vibe-wise.git
+[submodule "tools/rederive"]
+	path = tools/rederive
+	url = https://github.com/EricJujianZou/rederive.git

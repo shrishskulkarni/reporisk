@@ -1,52 +1,58 @@
 ---
 name: vibe-wise
 description: >-
-  Educational, learning-oriented development workflow for pair programming.
-  Enforces 4 human-in-the-loop checkpoints: Build Questions, Design Review, Implementation Checkpoints,
-  and Discuss & Explain. Explains technical concepts, architectural alternatives, and trade-offs before generating code.
+  Learning-oriented pair-programming workflow adapter delegating to tools/vibe-wise/.
+  Enforces 4 human-in-the-loop checkpoints: Build Checkpoint, Design Checkpoint,
+  Implementation Checkpoint, and Post-Implementation Explanation.
+  The learner owns the design; Antigravity explains concepts, presents trade-offs, and writes agreed code.
 ---
 
-# VibeWise — Learning-Oriented Engineering Workflow
+# VibeWise — Learning-First Engineering Adapter
 
-VibeWise transforms AI-assisted coding from a mindless "vibe coding" black box into an educational, high-agency engineering partnership:
-**"You build, AI writes."**
+This skill is a thin adapter delegating directly to the authentic upstream **VibeWise** project:
+- **Upstream Repository:** `tools/vibe-wise/` (`https://github.com/nykooi1/vibe-wise.git`)
+- **Upstream Author:** [@nykooi1](https://github.com/nykooi1)
+- **Upstream Behavioral Specification:** [`tools/vibe-wise/skills/learn/behavior.md`](../../tools/vibe-wise/skills/learn/behavior.md)
+- **Upstream Onboarding & State Templates:** [`tools/vibe-wise/skills/learn/onboarding.md`](../../tools/vibe-wise/skills/learn/onboarding.md)
+- **Local State Location:** `.vibe-wise/` (tracks `profile.md`, `project-map.md`, `progress.md`)
 
-The objective is to ensure that the repository owner (**Shrish Kulkarni @shrishskulkarni**) deeply understands every component, architectural trade-off, security mechanism, and design decision in RepoRisk.
+> [!IMPORTANT]
+> The repository owner (**Shrish Kulkarni @shrishskulkarni**) is the primary engineer and architect.
+> Learning, architectural transparency, and owner control take priority over raw implementation speed.
+> This skill is subordinate to [`AGENTS.md`](../../AGENTS.md).
 
 ---
 
-## The Four Checkpoints
+## Operating Protocol
 
-During every phase and substantial subtask, VibeWise activates four mandatory checkpoints:
+Antigravity follows the official upstream VibeWise behavioral rules from `tools/vibe-wise/skills/learn/behavior.md`:
 
-### 1. Build Checkpoint (Problem Formulation & Scope)
-Before proposing architecture or code:
-- Clearly define the problem statement and operational boundaries.
-- Ask clarifying questions about requirements, constraints, and priorities.
-- Explain unfamiliar domain concepts (e.g., AST parsing vs regex scanning, SARIF object model, container cgroups isolation).
-- Outline the edge cases that must be guarded against.
+### 1. Build Checkpoint (Problem Formulation & Learner Design)
+- Understand the problem requirements, then ask for the owner's preferred approach before proposing one.
+- Explain unfamiliar concepts directly using **Concept** (what it is) and **Why this matters** (practical consequences in RepoRisk).
+- Leave design questions open for the owner to steer.
 
-### 2. Design Checkpoint (System Map & Alternatives)
-Before selecting an approach:
-- Present at least 2 distinct viable approaches with clear trade-offs.
-- Explain *why* specific technologies, libraries, or patterns are recommended.
-- Map data flows, trust boundaries, and component interactions.
-- Await owner feedback and direction before proceeding.
+### 2. Design Checkpoint (Trade-Offs & Architectural Map)
+- Summarize the proposed design and compare concrete alternatives with their trade-offs.
+- Present a compact **Proposed Additions** table (`Detail / Proposal / Why it matters`) for extra scope.
+- Offer **Confirm and continue** to record the design before moving forward (does NOT authorize code changes).
 
 ### 3. Implementation Checkpoint (Explicit Authorization)
-- Break down the proposed implementation into clear, manageable steps.
-- Explain what each file and function will accomplish.
-- Confirm explicit owner authorization before writing or modifying significant codebase infrastructure.
+- Describe the exact files, functions, and tests ready to be written.
+- Offer **Implement this step** to pause for explicit owner authorization before writing or modifying code.
 
-### 4. Discuss & Explain (Post-Implementation Transparency)
-After code and tests are prepared:
-- Walk through the implemented changes and how they work.
-- Explain key unit tests and what failure scenarios they guard against.
-- Review what was learned and log architectural decisions in `docs/engineering/`.
+### 4. Implementation Report & Explanation
+- Provide a concise report explaining what changed, how key code functions, and why it fits the agreed design.
+- Report all tests added or updated and their actual verification results.
+- Update `.vibe-wise/progress.md` with completed milestones and pending decisions.
 
 ---
 
-## Core Guidelines
-- Never rush into voluminous code generation without prior alignment.
-- Never hand-wave trade-offs or pretend a solution has zero drawbacks.
-- Adapt explanations to be technically precise, transparent, and educational.
+## Session State Management
+
+VibeWise state files are local Markdown documents stored in `.vibe-wise/`.
+To reset or archive state, execute upstream's reset script:
+```bash
+python tools/vibe-wise/skills/reset/reset.py
+```
+*(Runs with `BypassSandbox: false` inside the standard terminal sandbox).*
