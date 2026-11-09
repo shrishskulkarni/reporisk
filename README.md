@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/shrishskulkarni/reporisk/actions"><img src="https://github.com/shrishskulkarni/reporisk/workflows/CI/badge.svg" alt="CI Status" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Non--Commercial-red.svg" alt="License" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0_with_Rider-orange.svg" alt="License" /></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node.js-%E2%89%A520.0.0-green.svg" alt="Node.js Version" /></a>
   <a href="https://pnpm.io"><img src="https://img.shields.io/badge/Maintained%20with-pnpm-orange.svg" alt="pnpm" /></a>
 </p>
@@ -155,4 +155,4 @@ pnpm --filter reporisk exec reporisk scan https://github.com/owner/repo
 ## Governance & Maintenance
 
 - **Owner & Principal Maintainer:** Shrish Kulkarni ([@shrishskulkarni](https://github.com/shrishskulkarni))
-- **License:** [RepoRisk Non-Commercial & Patent-Restricted License](LICENSE) (Explicit written permission from Shrish Kulkarni required for commercial or patent use)
+- **License:** [Apache License 2.0 with RepoRisk Non-Commercial and Patent Reservation Rider](LICENSE) (Explicit written permission from Shrish Kulkarni required for commercial or patent use)

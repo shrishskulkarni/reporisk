@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Monorepo foundation established using `pnpm` workspaces (`packages/core`, `packages/cli`).
-- RepoRisk Non-Commercial and Patent-Restricted License (explicit written permission from Shrish Kulkarni required for commercial or patent use).
+- Apache License 2.0 with RepoRisk Non-Commercial and Patent Reservation Rider (explicit written permission from Shrish Kulkarni required for commercial or patent use).
 - Official RepoRisk brand logo asset and header integration.
 - Core project governance, contributing guidelines, and security reporting policy.
 - Canonical TypeScript base configuration supporting ES2022 and NodeNext module resolution.
