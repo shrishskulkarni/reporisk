@@ -11,8 +11,8 @@ The Core MVP delivers the foundational end-to-end Repository Risk Intelligence p
 ### Capabilities & Deliverables
 - [x] **Phase 0 — Tool Integration & Infrastructure:** Pinned integration of authentic upstream tools, sandboxing architecture, and repository hygiene.
 - [x] **Phase 1 — Product Research & Architecture:** Canonical 13-field finding schema, tri-factor independence, 5-domain versioned risk model, STRIDE threat model, and adversarial trial.
-- [ ] **Phase 2 — Repository Foundation (In Progress):** pnpm monorepo workspace, TypeScript compilation, Vitest test suite, CI automation, and open-source governance.
-- [ ] **Phase 3 — Ingestion & Discovery Engine:** Safe sandbox cloning for public GitHub URLs and local paths, path traversal defense, and manifest-based topology discovery (languages, frameworks, entry points, trust boundaries).
+- [x] **Phase 2 — Repository Foundation:** pnpm monorepo workspace, TypeScript compilation, Vitest test suite, CI automation, and open-source governance.
+- [x] **Phase 3 — Ingestion & Discovery Engine:** Safe sandbox cloning for public GitHub URLs and local paths, path traversal defense, and manifest-based topology discovery (languages, frameworks, entry points, trust boundaries).
 - [ ] **Phase 4 — Category A Scanner Orchestrator:** Parallel sandboxed execution of Gitleaks, Semgrep OSS, OSV-Scanner, and Checkov under 120s timeouts with memory limits.
 - [ ] **Phase 5 — Canonical Findings Engine:** Normalization of raw scanner outputs into the 13-field schema, SHA-256 fingerprint deduplication, and immutable raw evidence preservation.
 - [ ] **Phase 6 — Graph Correlation Engine:** Construction of directed acyclic graphs for Attack Paths and Failure Paths with strict edge-level evidence (`CONFIRMED`, `INFERRED`, `HYPOTHETICAL`).

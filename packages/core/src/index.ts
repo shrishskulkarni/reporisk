@@ -8,7 +8,11 @@ export * from './types/risk.js';
 export * from './types/graph.js';
 export * from './types/topology.js';
 export * from './types/scanner.js';
+export * from './types/ingestion.js';
 export * from './constants.js';
+
+export * from './ingestion/index.js';
+export * from './topology/index.js';
 
 import { DEFAULT_RISK_PARAMETERS, REPORISK_VERSION } from './constants.js';
 import type { RiskParameters } from './types/risk.js';
