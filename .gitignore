@@ -5,6 +5,14 @@
 # ------------------------------------------------------------------------------
 # 1. Internal Agent & Development Tooling Infrastructure
 # ------------------------------------------------------------------------------
+# Internal agent orchestration files
+AGENTS.md
+AGENTS.local.md
+
+# Internal development, engineering & governance documentation
+docs/engineering/
+docs/governance/
+
 # Local agent harnesses, skill mounts, and private assistant configurations
 .agents/
 .agent/
