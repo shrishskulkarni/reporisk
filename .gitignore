@@ -1,0 +1,104 @@
+# ==============================================================================
+# RepoRisk .gitignore
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Internal Agent & Development Tooling Infrastructure
+# ------------------------------------------------------------------------------
+# Local agent harnesses, skill mounts, and private assistant configurations
+.agents/
+.agent/
+_agents/
+_agent/
+
+# Internal tool runtimes & local checkouts of third-party workflow utilities
+tools/
+vendor/
+.vendor/
+
+# Internal runtime state & session directories from workflow tools
+.court/
+.vibe-wise/
+.sensible-vibes/
+.rederive/
+
+# Agent scratch spaces, intermediate task logs, and local transcripts
+.scratch/
+scratch/
+*.log
+
+# ------------------------------------------------------------------------------
+# 2. Environment Configurations, Credentials & Local Secrets
+# ------------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.env
+*.local
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
+
+# ------------------------------------------------------------------------------
+# 3. Language & Runtime Artifacts (Node.js, TypeScript, Python)
+# ------------------------------------------------------------------------------
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.turbo/
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ------------------------------------------------------------------------------
+# 4. Operating System & Editor Artifacts
+# ------------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.sublime-workspace
+*.sublime-project
+
+# ------------------------------------------------------------------------------
+# 5. Intermediate Scan Outputs & Temporary Workspaces
+# ------------------------------------------------------------------------------
+tmp/
+temp/
+reporisk_scan_*/
+reports/tmp/
