@@ -22,7 +22,7 @@ If you discover a security vulnerability in RepoRisk, **please do NOT open a pub
 ### Reporting Channel
 Please report all security vulnerabilities directly to the project maintainer:
 - **Primary Contact:** Shrish Kulkarni ([@shrishskulkarni](https://github.com/shrishskulkarni))
-- **Email:** Report via GitHub Security Advisories at [https://github.com/shrishskulkarni/reporisk/security/advisories/new](https://github.com/shrishskulkarni/reporisk/security/advisories/new) (or email `shrishkulkarni@gmail.com`).
+- **Email:** Report via GitHub Security Advisories at [https://github.com/shrishskulkarni/reporisk/security/advisories/new](https://github.com/shrishskulkarni/reporisk/security/advisories/new) (or email `shrishskulkarni@outlook.com`).
 
 ### Information to Include
 To help us triage and resolve the issue quickly, please provide:

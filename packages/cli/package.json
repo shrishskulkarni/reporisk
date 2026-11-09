@@ -2,7 +2,7 @@
   "name": "reporisk",
   "version": "0.1.0",
   "description": "Command-line interface for the RepoRisk intelligence platform",
-  "author": "Shrish Kulkarni <shrishkulkarni@gmail.com>",
+  "author": "Shrish Kulkarni <shrishskulkarni@outlook.com>",
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "bin": {
