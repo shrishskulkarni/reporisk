@@ -6,7 +6,7 @@
  */
 
 import { realpathSync, statSync, lstatSync } from 'node:fs';
-import { resolve, normalize, isAbsolute } from 'node:path';
+import { resolve, normalize, isAbsolute, dirname, basename } from 'node:path';
 import { SecurityBoundaryViolationError } from '../types/ingestion.js';
 
 // Regex permitting strictly valid HTTPS git URLs without shell or credential escapes
@@ -42,7 +42,8 @@ export function isSafeGitUrl(url: string): boolean {
 
 /**
  * Validates that candidatePath resides strictly within workspaceRoot.
- * Prevents Directory Traversal ("Zip Slip") and hostile escape attempts.
+ * Prevents Directory Traversal ("Zip Slip") and hostile escape attempts,
+ * including non-existent paths traversing through external symlinked ancestors.
  *
  * Returns the canonical absolute path.
  * Throws SecurityBoundaryViolationError if an escape is detected.
@@ -68,40 +69,98 @@ export function validatePathSafety(workspaceRoot: string, candidatePath: string)
     );
   }
 
-  // Canonicalize candidate path if it exists
-  let canonicalCandidate: string;
+  // Windows and macOS are case-insensitive by default; Linux/POSIX systems are case-sensitive.
+  const isCaseInsensitive = process.platform === 'win32' || process.platform === 'darwin';
+  const sep = process.platform === 'win32' ? '\\' : '/';
+  const rootPrefix = canonicalRoot.endsWith(sep) ? canonicalRoot : canonicalRoot + sep;
+
+  function checkContainment(resolvedPath: string): boolean {
+    const cmpRoot = isCaseInsensitive ? rootPrefix.toLowerCase() : rootPrefix;
+    const cmpCanonicalRoot = isCaseInsensitive ? canonicalRoot.toLowerCase() : canonicalRoot;
+    const cmpPath = isCaseInsensitive ? resolvedPath.toLowerCase() : resolvedPath;
+    const cmpPathWithSep = isCaseInsensitive
+      ? (resolvedPath.endsWith(sep) ? resolvedPath.toLowerCase() : (resolvedPath + sep).toLowerCase())
+      : (resolvedPath.endsWith(sep) ? resolvedPath : resolvedPath + sep);
+
+    return cmpPath === cmpCanonicalRoot || cmpPathWithSep.startsWith(cmpRoot);
+  }
+
+  // Check if candidate path exists on disk
+  let exists = false;
   try {
-    // If it's a symlink, check where it points
-    const lstat = lstatSync(absCandidate);
-    if (lstat.isSymbolicLink()) {
-      canonicalCandidate = realpathSync.native(absCandidate);
-    } else {
-      canonicalCandidate = realpathSync.native(absCandidate);
-    }
+    lstatSync(absCandidate);
+    exists = true;
   } catch {
-    // If candidate path does not exist yet (e.g. proposed file), check its resolved parent
-    canonicalCandidate = absCandidate;
+    exists = false;
   }
 
-  // Ensure case-insensitive matching for Windows compatibility, but exact prefix containment
-  const rootPrefix = canonicalRoot.endsWith('\\') || canonicalRoot.endsWith('/')
-    ? canonicalRoot
-    : canonicalRoot + (process.platform === 'win32' ? '\\' : '/');
+  if (exists) {
+    let canonicalCandidate: string;
+    try {
+      canonicalCandidate = realpathSync.native(absCandidate);
+    } catch (err) {
+      throw new SecurityBoundaryViolationError(
+        `Failed to resolve realpath of candidate: ${absCandidate} (${err instanceof Error ? err.message : String(err)})`
+      );
+    }
 
-  const normalizedPrefix = rootPrefix.toLowerCase();
-  const normalizedCandidate = (canonicalCandidate + (process.platform === 'win32' ? '\\' : '/')).toLowerCase();
+    if (!checkContainment(canonicalCandidate)) {
+      throw new SecurityBoundaryViolationError(
+        `Security Boundary Violation: Path "${candidatePath}" escapes workspace boundary "${canonicalRoot}".`
+      );
+    }
 
-  const isContained =
-    canonicalCandidate.toLowerCase() === canonicalRoot.toLowerCase() ||
-    normalizedCandidate.startsWith(normalizedPrefix);
+    return canonicalCandidate;
+  } else {
+    // Candidate does not exist: walk upward to find the nearest existing ancestor
+    let curr = absCandidate;
+    const unverifiedSegments: string[] = [];
 
-  if (!isContained) {
-    throw new SecurityBoundaryViolationError(
-      `Security Boundary Violation: Path "${candidatePath}" escapes workspace boundary "${canonicalRoot}".`
-    );
+    while (true) {
+      const parent = dirname(curr);
+      if (parent === curr) {
+        // Reached filesystem root and nothing exists
+        break;
+      }
+      unverifiedSegments.unshift(basename(curr));
+      curr = parent;
+
+      try {
+        lstatSync(curr);
+        break; // curr exists!
+      } catch {
+        // keep walking up
+      }
+    }
+
+    let canonicalAncestor: string;
+    try {
+      canonicalAncestor = realpathSync.native(curr);
+    } catch (err) {
+      throw new SecurityBoundaryViolationError(
+        `Cannot resolve existing ancestor for path "${candidatePath}": ${curr} (${err instanceof Error ? err.message : String(err)})`
+      );
+    }
+
+    // Verify that the existing ancestor is inside the workspace
+    if (!checkContainment(canonicalAncestor)) {
+      throw new SecurityBoundaryViolationError(
+        `Security Boundary Violation: Path "${candidatePath}" escapes workspace boundary via ancestor "${canonicalAncestor}".`
+      );
+    }
+
+    // Append the unverified segments to the canonical ancestor
+    const canonicalCandidate = resolve(canonicalAncestor, ...unverifiedSegments);
+
+    // Final check to ensure combined path does not escape
+    if (!checkContainment(canonicalCandidate)) {
+      throw new SecurityBoundaryViolationError(
+        `Security Boundary Violation: Path "${candidatePath}" escapes workspace boundary "${canonicalRoot}".`
+      );
+    }
+
+    return canonicalCandidate;
   }
-
-  return canonicalCandidate;
 }
 
 /**

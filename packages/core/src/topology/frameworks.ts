@@ -208,38 +208,43 @@ export function scanFrameworks(
   const frameworks: DetectedFramework[] = [];
   const detectedKeys = new Set<string>();
 
-  // 1. Inspect manifests by signatures
-  const fileContentCache: Record<string, string> = {};
-
+  // 1. Group framework signatures by manifest name
+  const signaturesByManifest = new Map<string, FrameworkSignature[]>();
   for (const sig of FRAMEWORK_SIGNATURES) {
-    // Look for matching files in scanned files
-    const matchingFiles = scannedFiles.filter((f) => f.endsWith(sig.manifestName));
+    const list = signaturesByManifest.get(sig.manifestName) ?? [];
+    list.push(sig);
+    signaturesByManifest.set(sig.manifestName, list);
+  }
 
-    for (const relFile of matchingFiles) {
-      if (!fileContentCache[relFile]) {
+  // 2. Inspect manifests present in scanned files (reading each manifest at most once)
+  for (const relFile of scannedFiles) {
+    for (const [manifestName, signatures] of signaturesByManifest.entries()) {
+      if (relFile.endsWith(manifestName)) {
+        let content: string;
         try {
-          fileContentCache[relFile] = readFileSync(join(workspaceRoot, relFile), 'utf8');
+          content = readFileSync(join(workspaceRoot, relFile), 'utf8');
         } catch {
           continue;
         }
-      }
 
-      const content = fileContentCache[relFile]!;
-      if (sig.check(content)) {
-        const key = `${sig.name}:${sig.category}`;
-        if (!detectedKeys.has(key)) {
-          detectedKeys.add(key);
-          frameworks.push({
-            name: sig.name,
-            category: sig.category,
-            manifestFile: relFile
-          });
+        for (const sig of signatures) {
+          if (sig.check(content)) {
+            const key = `${sig.name}:${sig.category}`;
+            if (!detectedKeys.has(key)) {
+              detectedKeys.add(key);
+              frameworks.push({
+                name: sig.name,
+                category: sig.category,
+                manifestFile: relFile
+              });
+            }
+          }
         }
       }
     }
   }
 
-  // 2. Inspect CI/CD workflows
+  // 3. Inspect CI/CD workflows
   const hasGitHubWorkflows = scannedFiles.some((f) => f.startsWith('.github/workflows/'));
   if (hasGitHubWorkflows && !detectedKeys.has('GitHub Actions:CI_CD')) {
     detectedKeys.add('GitHub Actions:CI_CD');
@@ -260,7 +265,7 @@ export function scanFrameworks(
     });
   }
 
-  // 3. Inspect Infrastructure as Code (IaC)
+  // 4. Inspect Infrastructure as Code (IaC)
   const hasDocker = scannedFiles.some((f) => f.toLowerCase().includes('dockerfile'));
   if (hasDocker && !detectedKeys.has('Docker:INFRASTRUCTURE')) {
     detectedKeys.add('Docker:INFRASTRUCTURE');

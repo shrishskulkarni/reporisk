@@ -58,6 +58,30 @@ const AUTH_KEYWORDS = [
 ];
 
 /**
+ * Distinguishes documentation and test artifacts from runtime application code.
+ */
+function isDocOrTestArtifact(filePath: string): boolean {
+  const normalized = filePath.replace(/\\/g, '/').toLowerCase();
+  return (
+    normalized.startsWith('docs/') ||
+    normalized.includes('/docs/') ||
+    normalized.startsWith('test/') ||
+    normalized.includes('/test/') ||
+    normalized.startsWith('tests/') ||
+    normalized.includes('/tests/') ||
+    normalized.endsWith('.test.ts') ||
+    normalized.endsWith('.test.js') ||
+    normalized.endsWith('.test.tsx') ||
+    normalized.endsWith('.test.jsx') ||
+    normalized.endsWith('.spec.ts') ||
+    normalized.endsWith('.spec.js') ||
+    normalized.endsWith('.spec.tsx') ||
+    normalized.endsWith('.spec.jsx') ||
+    normalized.endsWith('.md')
+  );
+}
+
+/**
  * Checks if a code line or its enclosing context suggests authentication requirements.
  */
 function isAuthProtected(line: string, surroundingLines: readonly string[]): boolean {
@@ -75,8 +99,9 @@ export function scanEntryPoints(
   const entryPoints: EntryPoint[] = [];
   const candidateExtensions = new Set(['.ts', '.js', '.tsx', '.jsx', '.py', '.go', '.rs', '.java', '.rb', '.php']);
 
-  // Filter candidates
+  // Filter candidates, strictly excluding test suites and documentation
   const candidateFiles = scannedFiles.filter((f) => {
+    if (isDocOrTestArtifact(f)) return false;
     const ext = f.slice(f.lastIndexOf('.')).toLowerCase();
     return candidateExtensions.has(ext);
   });
@@ -123,10 +148,32 @@ export function scanEntryPoints(
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i]!;
+      const trimmed = line.trim();
+
+      // Skip commented-out routes and docstring/block-comment lines
+      if (
+        trimmed.startsWith('//') ||
+        trimmed.startsWith('#') ||
+        trimmed.startsWith('/*') ||
+        trimmed.startsWith('*') ||
+        trimmed.startsWith('<!--')
+      ) {
+        continue;
+      }
 
       for (const pattern of ROUTE_PATTERNS) {
         const match = pattern.regex.exec(line);
         if (match) {
+          // Verify match is not preceded by an inline comment on the same line
+          const slashIdx = line.indexOf('//');
+          const hashIdx = line.indexOf('#');
+          if (
+            (slashIdx !== -1 && slashIdx < match.index) ||
+            (hashIdx !== -1 && hashIdx < match.index)
+          ) {
+            continue;
+          }
+
           const rawMethod = match[pattern.methodGroup]?.toUpperCase() ?? 'ANY';
           const routePath = match[pattern.pathGroup] ?? '/';
 

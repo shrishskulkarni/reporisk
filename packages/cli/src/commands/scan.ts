@@ -3,12 +3,58 @@
  * Integrates ingestion and topology discovery into the CLI workflow.
  */
 
+import { writeFileSync } from 'node:fs';
 import { ingestRepository, discoverTopology, type TopologyMap } from '@reporisk/core';
 
 export interface ScanCommandOptions {
   format?: 'text' | 'json' | 'markdown' | undefined;
   output?: string | undefined;
   timeout?: string | undefined;
+}
+
+function formatTextSummary(workspacePath: string, commitSha: string, topology: TopologyMap): string {
+  const lines: string[] = [];
+  lines.push('--- Repository Topology Summary ---');
+  lines.push(`Root: ${workspacePath}`);
+  lines.push(`Commit: ${commitSha}`);
+  lines.push(`Scanned Files: ${topology.totalFiles} (${Math.round(topology.totalBytes / 1024)} KB)`);
+
+  lines.push('\nLanguages:');
+  if (topology.languages.length === 0) {
+    lines.push('  (No recognized source code files)');
+  } else {
+    for (const lang of topology.languages.slice(0, 5)) {
+      lines.push(`  - ${lang.name.padEnd(16)}: ${lang.fileCount.toString().padStart(4)} files (${lang.percentage}%)`);
+    }
+  }
+
+  lines.push('\nFrameworks & Infrastructure:');
+  if (topology.frameworks.length === 0) {
+    lines.push('  (No standard application frameworks detected in manifests)');
+  } else {
+    for (const fw of topology.frameworks) {
+      lines.push(`  - [${fw.category}] ${fw.name} (via ${fw.manifestFile})`);
+    }
+  }
+
+  lines.push(`\nEntry Points (${topology.entryPoints.length} detected):`);
+  if (topology.entryPoints.length === 0) {
+    lines.push('  (No HTTP/API route entry points statically detected)');
+  } else {
+    for (const ep of topology.entryPoints.slice(0, 8)) {
+      lines.push(`  - [${ep.exposure}] ${ep.method ?? 'ANY'} ${ep.routePath ?? '/'} (${ep.file}:${ep.line})`);
+    }
+    if (topology.entryPoints.length > 8) {
+      lines.push(`    ... and ${topology.entryPoints.length - 8} more entry points`);
+    }
+  }
+
+  lines.push(`\nTrust Boundaries (${topology.trustBoundaries.length} identified):`);
+  for (const tb of topology.trustBoundaries) {
+    lines.push(`  - ${tb.name} (${tb.boundaryType}): ${tb.components.length} components`);
+  }
+
+  return lines.join('\n');
 }
 
 export async function runScan(target: string, options: ScanCommandOptions): Promise<TopologyMap> {
@@ -36,52 +82,23 @@ export async function runScan(target: string, options: ScanCommandOptions): Prom
     });
 
     if (isJson) {
-      console.log(JSON.stringify(topology, null, 2));
+      const jsonStr = JSON.stringify(topology, null, 2);
+      if (options.output) {
+        writeFileSync(options.output, jsonStr, 'utf8');
+      } else {
+        console.log(jsonStr);
+      }
       return topology;
     }
 
-    // Human-readable console output
-    console.log('\n--- Repository Topology Summary ---');
-    console.log(`Root: ${repo.workspacePath}`);
-    console.log(`Commit: ${repo.commitSha}`);
-    console.log(`Scanned Files: ${topology.totalFiles} (${Math.round(topology.totalBytes / 1024)} KB)`);
-
-    console.log('\nLanguages:');
-    if (topology.languages.length === 0) {
-      console.log('  (No recognized source code files)');
+    const summary = formatTextSummary(repo.workspacePath, repo.commitSha, topology);
+    if (options.output) {
+      writeFileSync(options.output, summary, 'utf8');
+      console.log(`\n[RepoRisk] Report successfully written to: ${options.output}`);
     } else {
-      for (const lang of topology.languages.slice(0, 5)) {
-        console.log(`  - ${lang.name.padEnd(16)}: ${lang.fileCount.toString().padStart(4)} files (${lang.percentage}%)`);
-      }
+      console.log('\n' + summary);
     }
 
-    console.log('\nFrameworks & Infrastructure:');
-    if (topology.frameworks.length === 0) {
-      console.log('  (No standard application frameworks detected in manifests)');
-    } else {
-      for (const fw of topology.frameworks) {
-        console.log(`  - [${fw.category}] ${fw.name} (via ${fw.manifestFile})`);
-      }
-    }
-
-    console.log(`\nEntry Points (${topology.entryPoints.length} detected):`);
-    if (topology.entryPoints.length === 0) {
-      console.log('  (No HTTP/API route entry points statically detected)');
-    } else {
-      for (const ep of topology.entryPoints.slice(0, 8)) {
-        console.log(`  - [${ep.exposure}] ${ep.method ?? 'ANY'} ${ep.routePath ?? '/'} (${ep.file}:${ep.line})`);
-      }
-      if (topology.entryPoints.length > 8) {
-        console.log(`    ... and ${topology.entryPoints.length - 8} more entry points`);
-      }
-    }
-
-    console.log(`\nTrust Boundaries (${topology.trustBoundaries.length} identified):`);
-    for (const tb of topology.trustBoundaries) {
-      console.log(`  - ${tb.name} (${tb.boundaryType}): ${tb.components.length} components`);
-    }
-
-    console.log('\nPhase 3 Ingestion & Topology complete. Next phase: Category A Scanners.');
     return topology;
   } finally {
     await repo.cleanup();

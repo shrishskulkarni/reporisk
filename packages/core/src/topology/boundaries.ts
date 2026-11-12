@@ -9,6 +9,30 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { TrustBoundary, EntryPoint, DetectedFramework } from '../types/topology.js';
 
+/**
+ * Distinguishes documentation and test artifacts from runtime application components.
+ */
+function isDocOrTestArtifact(filePath: string): boolean {
+  const normalized = filePath.replace(/\\/g, '/').toLowerCase();
+  return (
+    normalized.startsWith('docs/') ||
+    normalized.includes('/docs/') ||
+    normalized.startsWith('test/') ||
+    normalized.includes('/test/') ||
+    normalized.startsWith('tests/') ||
+    normalized.includes('/tests/') ||
+    normalized.endsWith('.test.ts') ||
+    normalized.endsWith('.test.js') ||
+    normalized.endsWith('.test.tsx') ||
+    normalized.endsWith('.test.jsx') ||
+    normalized.endsWith('.spec.ts') ||
+    normalized.endsWith('.spec.js') ||
+    normalized.endsWith('.spec.tsx') ||
+    normalized.endsWith('.spec.jsx') ||
+    normalized.endsWith('.md')
+  );
+}
+
 export function synthesizeTrustBoundaries(
   workspaceRoot: string,
   entryPoints: readonly EntryPoint[],
@@ -32,6 +56,7 @@ export function synthesizeTrustBoundaries(
   // 2. Authentication Gateway Boundary
   const authRoutes = entryPoints.filter((ep) => ep.exposure === 'AUTHENTICATED');
   const authFiles = scannedFiles.filter((f) => {
+    if (isDocOrTestArtifact(f)) return false;
     const lower = f.toLowerCase();
     return (
       lower.includes('auth') ||
@@ -57,6 +82,7 @@ export function synthesizeTrustBoundaries(
   // 3. Database Isolation Boundary
   const ormFrameworks = frameworks.filter((fw) => fw.category === 'ORM');
   const dbFiles = scannedFiles.filter((f) => {
+    if (isDocOrTestArtifact(f)) return false;
     const lower = f.toLowerCase();
     return (
       lower.includes('prisma/schema.prisma') ||

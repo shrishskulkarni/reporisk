@@ -65,12 +65,7 @@ const IGNORED_DIRECTORIES = new Set([
   'venv',
   'env',
   '.pytest_cache',
-  'coverage',
-  '.agents',
-  'tools',
-  '.court',
-  '.vibe-wise',
-  '.rederive'
+  'coverage'
 ]);
 
 export interface LanguageScanResult {
