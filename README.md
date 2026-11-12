@@ -155,4 +155,4 @@ pnpm --filter reporisk exec reporisk scan https://github.com/owner/repo
 ## Governance & Maintenance
 
 - **Owner & Principal Maintainer:** Shrish Kulkarni ([@shrishskulkarni](https://github.com/shrishskulkarni))
-- **License:** [Apache License 2.0 with RepoRisk Non-Commercial and Patent Reservation Rider](LICENSE) (Explicit written permission from Shrish Kulkarni required for commercial or patent use)
+- **License:** [Apache License, Version 2.0](LICENSE)
